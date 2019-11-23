@@ -3,12 +3,20 @@ const PORT = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
 const { Pool } = require('pg'); 
-var connect = 'postgres://vadwksdgipvswi:e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b@ec2-184-73-192-172.compute-1.amazonaws.com:5432/d9iendoj9imiad';
-
+//var connect = 'postgres://vadwksdgipvswi:e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b@ec2-184-73-192-172.compute-1.amazonaws.com:5432/d9iendoj9imiad';
+var heroconfig = {
+user: 'vadwksdgipvswi',
+database: 'd9iendoj9imiad',
+password: 'e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b',
+host: 'ec2-184-73-192-172.compute-1.amazonaws.com',
+port: 5432,
+max: 10,
+idleTimeoutMillis: 30000,
+};
 app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
 //const connect = 
-const pool = new Pool(connect);  
+const pool = new Pool(heroconfig);  
 //pool.defaults.ssl = true; //this is it!!!
 //set variables
 var singleQuery = '';
