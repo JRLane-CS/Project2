@@ -1,17 +1,14 @@
+//set node variables
 const path = require('path');
-const PORT = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
 const { Pool } = require('pg'); 
-const config = {
-    user: 'jerry',
-    database: 'movies',         //change to mydb for Heroku deployment
-    port: 5432                  //default
-};
-const connect = process.env.DATABASE_URL || "postgres://ta_user:ta_pass@localhost:5432/familyhistory";;
-const pool = new Pool({connect: connect});  
+const connect = process.env.DATABASE_URL || "postgres://jerry@localhost:5432/movies";
+const pool = new Pool({connect: connect,});  
+app.set('port', (process.env.PORT || 5000));
+app.use(express.static(path.join(__dirname, "public")))
 
-//set variables
+//set query variables
 var singleQuery = '';
 var listQuery = '';
 var dbstring = 
@@ -42,9 +39,7 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
 var where = 'WHERE title = $1 ';
 
 
-//express()
-app.set('port', (process.env.PORT || 5000));
-app.use(express.static(path.join(__dirname, "public")))
+
   
 //set / path
 app.get("/", (req, res) => res.render("pages/index"))
