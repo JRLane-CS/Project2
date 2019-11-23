@@ -85,15 +85,3 @@ app.get("/getMovies", (req, res) => {
 //set up local host port
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-
-
-
-
-
-pg.connect(process.env.HEROKU_POSTGRESQL_DBNAME_URL, function(err, client, done) {
-   client.query('SELECT * FROM your_table', function(err, result) {
-      done();
-      if(err) return console.error(err);
-      console.log(result.rows);
-   });
-});
