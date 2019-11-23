@@ -3,13 +3,13 @@ const PORT = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
 const { Pool } = require('pg'); 
-pg.defaults.ssl = true; //this is it!!!
+
 
 app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
 //const connect = 
 const pool = new Pool('postgres://vadwksdgipvswi:e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b@ec2-184-73-192-172.compute-1.amazonaws.com:5432/d9iendoj9imiad?ssl=true');  
-
+pool.defaults.ssl = true; //this is it!!!
 //set variables
 var singleQuery = '';
 var listQuery = '';
