@@ -9,7 +9,7 @@ app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
 //const connect = 
 const pool = new Pool(connect);  
-pool.defaults.ssl = true; //this is it!!!
+//pool.defaults.ssl = true; //this is it!!!
 //set variables
 var singleQuery = '';
 var listQuery = '';
