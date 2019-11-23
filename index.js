@@ -3,6 +3,8 @@ const PORT = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
 const { Pool } = require('pg'); 
+pg.defaults.ssl = true; //this is it!!!
+
 app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
 //const connect = 
