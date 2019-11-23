@@ -8,8 +8,8 @@ const config = {
     database: 'movies',         //change to mydb for Heroku deployment
     port: 5432                  //default
 };
-const connect = process.env.DATABASE_URL || config;
-const pool = new Pool(connect);  
+const connect = process.env.DATABASE_URL;
+const pool = new Pool({connect: connect});  
 
 //set variables
 var singleQuery = '';
