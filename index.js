@@ -8,7 +8,7 @@ const config = {
     database: 'movies',         //change to mydb for Heroku deployment
     port: 5432                  //default
 };
-const connect = process.env.DATABASE_URL;
+const connect = process.env.DATABASE_URL || "postgres://ta_user:ta_pass@localhost:5432/familyhistory";;
 const pool = new Pool({connect: connect});  
 
 //set variables
