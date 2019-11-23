@@ -2,9 +2,11 @@ const express = require("express");
 const path = require("path");
 const PORT = process.env.PORT || 5000;
 var pg = require('pg');
+const connect = process.env.DATABASE_URL;
 const config = {
     user: 'jerry',
-    database: 'mydb',         //change to mydb for Heroku deployment
+    password: 'password',
+	database: 'mydb',         //change to mydb for Heroku deployment
     port: 5432                  //default
 };
 
@@ -39,7 +41,7 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
 var where = 'WHERE title = $1 ';
 
 //create pool object using config as the parameter
-const pool = new pg.Pool(config);
+const pool = new pg.Pool({connect: connect});
 
 express()
   .use(express.static(path.join(__dirname, "public")))
