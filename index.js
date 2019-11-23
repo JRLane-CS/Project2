@@ -1,14 +1,7 @@
 const express = require("express");
 const path = require("path");
-const PORT = process.env.PORT || 5000;
-var pg = require('pg');
+const { Pool } = require("pg");
 const connect = process.env.DATABASE_URL;
-const config = {
-    user: 'jerry',
-    password: 'password',
-	database: 'mydb',         //change to mydb for Heroku deployment
-    port: 5432                  //default
-};
 
 //set variables
 var singleQuery = '';
@@ -44,6 +37,7 @@ var where = 'WHERE title = $1 ';
 const pool = new pg.Pool({connect: connect});
 
 express()
+  .set('port', (process.env.PORT || 5000));
   .use(express.static(path.join(__dirname, "public")))
   
   //set / path
