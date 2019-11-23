@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Mail Calculator Input</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- load bootstrap setup as outlined at W3Schools -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="jumbotron">
+	  <h1><b>Mail Calculator Input</b></h1>
+	</div>
+	<form id="form-1" action="http://localhost:5000/calculate">
+      <div>
+        <label for="weight">Enter weight in ounces</label>
+        <input type="text" id="weight" name="weight"/>
+      </div>
+      <div>
+        <label for="mail">Type Mail</label>
+        <select id="mail" name="mail">
+          <option value="0">Stamped Letters</option>
+          <option value="1">Metered Letters</option>
+          <option value="2">Large Envelopes (Flats)</option>
+          <option value="3">First-Class Package</option>
+        </select>
+      </div>
+      <div>
+        <button type="submit" id="calculate">Calculate</button>
+      </div>
+      <h1 id="result"></h1>
+    </form>
+  </body>
+</html>
