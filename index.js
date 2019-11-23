@@ -1,14 +1,14 @@
-//set node variables
 const path = require('path');
+const PORT = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
-const { Pool, Client } = require('pg'); 
-const connect = process.env.DATABASE_URL || "postgres://jerry@localhost:5432/movies";
-const pool = new Pool({connect: connect,});  
-app.set('port', (process.env.PORT || 5000));
+const { Pool } = require('pg'); 
+app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
+const connect = process.env.DATABASE_URL || "postgres://ta_user:ta_pass@localhost:5432/familyhistory";;
+const pool = new Pool({connect: connect});  
 
-//set query variables
+//set variables
 var singleQuery = '';
 var listQuery = '';
 var dbstring = 
