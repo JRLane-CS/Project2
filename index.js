@@ -5,7 +5,8 @@ const app = express();
 const { Pool } = require('pg'); 
 app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
-const connect = process.env.DATABASE_URL || "postgres://jerry@localhost:5432/movies";
+const connect = process.env.postgres://vadwksdgipvswi:e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b@ec2-184-73-192-172.compute-1.amazonaws.com:5432/d9iendoj9imiad ||
+ "postgres://jerry@localhost:5432/movies";
 const pool = new Pool({connect: connect});  
 
 //set variables
@@ -83,3 +84,16 @@ app.get("/getMovies", (req, res) => {
   
 //set up local host port
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+
+
+
+
+
+pg.connect(process.env.HEROKU_POSTGRESQL_DBNAME_URL, function(err, client, done) {
+   client.query('SELECT * FROM your_table', function(err, result) {
+      done();
+      if(err) return console.error(err);
+      console.log(result.rows);
+   });
+});
