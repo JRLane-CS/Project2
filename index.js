@@ -2,7 +2,7 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-const { Pool } = require('pg'); 
+const { Pool, Client } = require('pg'); 
 const connect = process.env.DATABASE_URL || "postgres://jerry@localhost:5432/movies";
 const pool = new Pool({connect: connect,});  
 app.set('port', (process.env.PORT || 5000));
