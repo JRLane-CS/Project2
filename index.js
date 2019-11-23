@@ -1,7 +1,15 @@
-const express = require("express");
-const path = require("path");
-const { Pool } = require("pg");
-const connect = process.env.DATABASE_URL;
+const path = require('path');
+const PORT = process.env.PORT || 5000;
+const express = require('express');
+const app = express();
+const { Pool } = require('pg'); 
+const config = {
+    user: 'jerry',
+    database: 'movies',         //change to mydb for Heroku deployment
+    port: 5432                  //default
+};
+const connect = process.env.DATABASE_URL || config;
+const pool = new Pool(connect);  
 
 //set variables
 var singleQuery = '';
@@ -33,52 +41,50 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
   'ORDER BY actress.name ASC'];
 var where = 'WHERE title = $1 ';
 
-//create pool object using config as the parameter
-const pool = new pg.Pool({connect: connect});
 
-express()
-  .set('port', (process.env.PORT || 5000));
-  .use(express.static(path.join(__dirname, "public")))
+//express()
+app.set('port', (process.env.PORT || 5000));
+app.use(express.static(path.join(__dirname, "public")))
   
-  //set / path
-  .get("/", (req, res) => res.render("pages/index"))
+//set / path
+app.get("/", (req, res) => res.render("pages/index"))
 
-  //set /getMovie path and get single query
-  .get("/getMovie", (req, res) => {
-    pool.connect(function(err, client, done) {
+//set /getMovie path and get single query
+app.get("/getMovie", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    singlequery = dbstring+where;
+    client.query(singlequery, [req.query.title], function(err, result) {
+      done();
       if (err) {
-        return console.error('error fetching client from pool', err);
+        return console.error('error running query', err);
       }
-      singlequery = dbstring+where;
-      client.query(singlequery, [req.query.title], function(err, result) {
-        done();
-        if (err) {
-          return console.error('error running query', err);
-        }
-        res.json(result.rows);
-	    res.end();
-      });
-    })
+      res.json(result.rows);
+      res.end();
+    });
   })
+})
 
-  //set /getMovies path and get movie list sorted by user selection  
-  .get("/getMovies", (req, res) => {
-    pool.connect(function(err, client, done) {
+//set /getMovies path and get movie list sorted by user selection  
+app.get("/getMovies", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    var list = req.query.list;
+    listQuery = dbstring+category[list];
+    client.query(listQuery, function(err, result) {
+      done();
       if (err) {
-        return console.error('error fetching client from pool', err);
+	    return console.error('error running query', err);
       }
-      var list = req.query.list;
-      listQuery = dbstring+category[list];
-      client.query(listQuery, function(err, result) {
-		done();
-        if (err) {
-		  return console.error('error running query', err);
-        }
-        res.json(result.rows);
-	    res.end();
-      });
-    })
+      res.json(result.rows);
+      res.end();
+    });
   })
+})
   
-  //set up local host port
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+//set up local host port
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
