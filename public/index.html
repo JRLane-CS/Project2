@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Movies Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!--get jquery-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!--get bootstrap-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<!--get css-->
+    <link rel = "stylesheet" type = "text/css" href = "db.css" />
+  </head>
+  <body>
+    <div class="jumbotron" id="head">
+	  <h1>
+	    Movie search page
+	  </h1>
+	  <hr>
+	</div>
+    <form id="form-1" >
+      <div>
+        <label for="title">Enter a movie title to search</label>
+        <input type="text" name="title" id="title"/>
+      </div>
+      <div>
+        <button type="button" id="search">Search</button>
+      </div>
+	  <br/>
+	  <div>
+        <label for="list">Show all movies sorted by:</label>
+		<select id="list" name="list" >
+          <option value="0">Title</option>
+          <option value="1">Year Made</option>
+          <option value="2">Rating</option>
+          <option value="3">Actor</option>
+		  <option value="4">Actress</option>
+        </select>
+      </div>
+	  <div>
+        <button type="button" id="all">Show</button>
+      </div>
+	  <script src="main.js"></script>
+    </form>
+	<br/>
+	<div>
+	  <hr>
+	  <ul>
+	  </ul>
+	  <hr>
+	</div>
+  </body>
+</html>
