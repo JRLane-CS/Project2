@@ -3,7 +3,7 @@ $(function() {
   //set url for server
   var url = window.location.hostname.startsWith("localhost")
     ? "http://localhost:5000"
-    : "https://immense-thicket-27185.herokuapp.com";
+    : "https://fun-times-project2.herokuapp.com";
   
   //single query title based
   $("#search").click(function(event) {

@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 5000;
 var pg = require('pg');
 const config = {
     user: 'jerry',
-    database: 'movies',         //change to mydb for Heroku deployment
+    database: 'mydb',         //change to mydb for Heroku deployment
     port: 5432                  //default
 };
 
