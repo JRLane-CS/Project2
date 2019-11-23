@@ -5,7 +5,7 @@ const app = express();
 const { Pool } = require('pg'); 
 app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
-const connect = process.env.DATABASE_URL || "postgres://ta_user:ta_pass@localhost:5432/familyhistory";;
+const connect = process.env.DATABASE_URL || "postgres://jerry@localhost:5432/movies";
 const pool = new Pool({connect: connect});  
 
 //set variables
