@@ -1,9 +1,12 @@
+/* this index.js set up for heroku only */
+
+//set node variables
 const path = require('path');
 const PORT = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
-const { Pool } = require('pg'); 
-//var connect = 'postgres://vadwksdgipvswi:e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b@ec2-184-73-192-172.compute-1.amazonaws.com:5432/d9iendoj9imiad';
+
+//set heroku configuration variables for my psql database
 var heroconfig = {
 user: 'vadwksdgipvswi',
 database: 'd9iendoj9imiad',
@@ -13,12 +16,10 @@ port: 5432,
 max: 10,
 idleTimeoutMillis: 30000,
 };
-app.set('port', (PORT));
-app.use(express.static(path.join(__dirname, "public")))
-//const connect = 
+const { Pool } = require('pg'); 
 const pool = new Pool(heroconfig);  
-//pool.defaults.ssl = true; //this is it!!!
-//set variables
+
+//set query variables
 var singleQuery = '';
 var listQuery = '';
 var dbstring = 
@@ -48,8 +49,9 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
   'ORDER BY actress.name ASC'];
 var where = 'WHERE title = $1 ';
 
-
-
+//set express variables
+app.set('port', (PORT));
+app.use(express.static(path.join(__dirname, "public")))
   
 //set / path
 app.get("/", (req, res) => res.render("pages/index"))
