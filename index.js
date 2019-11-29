@@ -17,7 +17,7 @@ max: 10,
 idleTimeoutMillis: 30000,
 };
 const { Pool } = require('pg'); 
-const pool = new Pool(process.env.DATABASE_URL);  
+const pool = new Pool(heroconfig);  
 
 //set query variables
 var singleQuery = '';
