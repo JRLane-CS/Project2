@@ -6,14 +6,11 @@ const PORT = process.env.PORT || 5000;
 const express = require('express');
 const app = express();
 
-//local config
 const config = {
     user: 'jerry',
     database: 'movies',         
     port: 5432                  
 };
-
-//heroku config
 var heroconfig = {
 user: 'vadwksdgipvswi',
 database: 'd9iendoj9imiad',

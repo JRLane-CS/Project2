@@ -21,20 +21,9 @@ $(function() {
             `No database match`
         ));
 	    else
-	      function(json) {
-            json.forEach(function(row) {
-              $.get(
-                `${url}/getMovie`,
-                {
-                },
-                function(json) {
-                  $("ul").append($("<li>").text(
-                    `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-                ));
-              }
-            );
-          });
-        }
+	      $("ul").append($("<li>").text(
+            `${json[0].title},  ${json[0].year},  ${json[0].rating},  ${json[0].actor},  ${json[0].actress}`
+        ));
       }
     );
   });
@@ -46,8 +35,7 @@ $(function() {
 	$.get(
       `${url}/getMovies`,
       {
-        title: $("#title").val(),
-		list:  $("#list").val()
+        list: $("#list").val()
       },
       function(json) {
         json.forEach(function(row) {
