@@ -87,8 +87,8 @@ app.get("/getMovies", (req, res) => {
       return console.error('error fetching client from pool', err);
     }
     var list = req.query.list;
-	console.log(list);
-    listQuery = dbstring+category[list];
+	listQuery = dbstring+category[list];
+    console.log(list+" -> "+listQuery);
     client.query(listQuery, function(err, result) {
       done();
       if (err) {
