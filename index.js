@@ -16,8 +16,13 @@ port: 5432,
 max: 10,
 idleTimeoutMillis: 30000,
 };
+const config = {
+    user: 'jerry',
+    database: 'movies',         
+    port: 5432                  
+};
 const { Pool } = require('pg'); 
-const pool = new Pool(heroconfig);  
+const pool = new Pool(herokuconfig);  
 
 //set query variables
 var singleQuery = '';
