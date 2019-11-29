@@ -47,7 +47,7 @@ var dbstring =
 var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC', 
   'ORDER BY rating.mpaa ASC', 'ORDER BY actor.name ASC', 
   'ORDER BY actress.name ASC'];
-var where = 'WHERE title = $1 ';
+var where = 'WHERE title = $2';
 
 //set express variables
 app.set('port', (PORT));
