@@ -25,7 +25,7 @@ idleTimeoutMillis: 30000,
 };
 
 const { Pool } = require('pg'); 
-const pool = new Pool(herokuconfig);  
+const pool = new Pool(config);  
 
 //set query variables
 var singleQuery = '';
