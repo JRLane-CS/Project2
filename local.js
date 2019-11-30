@@ -1,13 +1,14 @@
-/* this index.js set up for heroku access only */
+/* this index.js set up for local access only */
 
 //set node variables
 const path = require('path');
 const PORT = process.env.PORT || 5000;
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 
 //set heroku configuration variables for my psql database
-var heroconfig = {
+var herokuconfig = {
 user: 'vadwksdgipvswi',
 database: 'd9iendoj9imiad',
 password: 'e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b',
@@ -21,8 +22,12 @@ const config = {
     database: 'movies',         
     port: 5432                  
 };
+
+//prepare for post
+  
+  
 const { Pool } = require('pg'); 
-const pool = new Pool(herokuconfig);  
+const pool = new Pool(config);  
 
 //set query variables
 var singleQuery = '';
@@ -56,6 +61,8 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
 //set express variables
 app.set('port', (PORT));
 app.use(express.static(path.join(__dirname, "public")))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
   
 //set / path
 app.get("/", (req, res) => res.render("pages/index"))
@@ -114,14 +121,14 @@ app.get("/getActress", (req, res) => {
   })
 })
 
-//set /getRating path and get single query
-app.get("/getRating", (req, res) => {
+//set /getRating path and post single query
+app.post("/getRating", (req, res) => {
   pool.connect(function(err, client, done) {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
     singlequery = dbstring+'WHERE rating.mpaa = $1 ';
-    client.query(singlequery, [req.query.rating], function(err, result) {
+    client.query(singlequery, [req.body.rating], function(err, result) {
       done();
       if (err) {
         return console.error('error running query', err);

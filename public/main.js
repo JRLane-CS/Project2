@@ -104,7 +104,7 @@ $(function() {
   $("#searchRating").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.get(
+	$.post(
       `${url}/getRating`,
       {
         rating: $("#rating").val()
@@ -116,7 +116,7 @@ $(function() {
         ));
 	    else
 	      json.forEach(function(row) {
-          $.get(
+          $.post(
             `${url}/getRating`,
             {
             },
@@ -218,7 +218,7 @@ $("#getRating").click(function(event) {
   $("#header").text("Search by Rating"); 
   $("#functions").empty();
   $("#functions").html(
-	'<form name="form-1">'+
+	'<form method="post" name="form-1">'+
 	'<div>'+
     '<label for="rating">Select a rating to search</label>'+
     '<select id="rating" name="rating" >'+
