@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 5000;
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+var cleaner = require('sanitizer');
 
 //set heroku configuration variables for my psql database
 var herokuconfig = {
@@ -73,8 +74,9 @@ app.get("/getMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    singlequery = dbstring+'WHERE title = $1 ';
-    client.query(singlequery, [req.query.title], function(err, result) {
+	var title = cleaner.sanitize(req.query.title);
+	singlequery = dbstring+'WHERE title = $1 ';
+    client.query(singlequery, [title], function(err, result) {
       done();
       if (err) {
         return console.error('error running query', err);
@@ -91,8 +93,9 @@ app.get("/getActor", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
+	var actor = cleaner.sanitize(req.query.actor);
 	singlequery = dbstring+'WHERE actor.name = $1 ';
-	client.query(singlequery, [req.query.actor], function(err, result) {
+	client.query(singlequery, [actor], function(err, result) {
       done();
       if (err) {
         return console.error('error running query', err);
@@ -109,8 +112,9 @@ app.get("/getActress", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    singlequery = dbstring+'WHERE actress.name = $1 ';
-    client.query(singlequery, [req.query.actress], function(err, result) {
+    var actress = cleaner.sanitize(req.query.actress);
+	singlequery = dbstring+'WHERE actress.name = $1 ';
+    client.query(singlequery, [actress], function(err, result) {
       done();
       if (err) {
         return console.error('error running query', err);
@@ -127,7 +131,7 @@ app.post("/getRating", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+	singlequery = dbstring+'WHERE rating.mpaa = $1 ';
     client.query(singlequery, [req.body.rating], function(err, result) {
       done();
       if (err) {
