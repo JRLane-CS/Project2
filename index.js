@@ -1,4 +1,4 @@
-/* this index.js set up for heroku only */
+/* this index.js set up for local access only */
 
 //set node variables
 const path = require('path');
@@ -7,7 +7,7 @@ const express = require('express');
 const app = express();
 
 //set heroku configuration variables for my psql database
-var herokuconfig = {
+var heroconfig = {
 user: 'vadwksdgipvswi',
 database: 'd9iendoj9imiad',
 password: 'e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b',
@@ -16,7 +16,6 @@ port: 5432,
 max: 10,
 idleTimeoutMillis: 30000,
 };
-
 const config = {
     user: 'jerry',
     database: 'movies',         
@@ -53,7 +52,6 @@ var dbstring =
 var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC', 
   'ORDER BY rating.mpaa ASC', 'ORDER BY actor.name ASC', 
   'ORDER BY actress.name ASC'];
-var where = 'WHERE title = $1 ';
 
 //set express variables
 app.set('port', (PORT));
@@ -68,8 +66,62 @@ app.get("/getMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    singlequery = dbstring+where;
+    singlequery = dbstring+'WHERE title = $1 ';
     client.query(singlequery, [req.query.title], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.json(result.rows);
+      res.end();
+    });
+  })
+})
+
+//set /getActor path and get single query
+app.get("/getActor", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+	singlequery = dbstring+'WHERE actor.name = $1 ';
+	client.query(singlequery, [req.query.actor], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.json(result.rows);
+      res.end();
+    });
+  })
+})
+
+//set /getActor path and get single query
+app.get("/getActress", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    singlequery = dbstring+'WHERE actress.name = $1 ';
+    client.query(singlequery, [req.query.actress], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+	  res.json(result.rows);
+      res.end();
+    });
+  })
+})
+
+//set /getRating path and get single query
+app.get("/getRating", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+    singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+    client.query(singlequery, [req.query.rating], function(err, result) {
       done();
       if (err) {
         return console.error('error running query', err);
@@ -87,8 +139,7 @@ app.get("/getMovies", (req, res) => {
       return console.error('error fetching client from pool', err);
     }
     var list = req.query.list;
-	listQuery = dbstring+category[list];
-    console.log(list+" -> "+listQuery);
+    listQuery = dbstring+category[list];
     client.query(listQuery, function(err, result) {
       done();
       if (err) {

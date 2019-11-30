@@ -42,3 +42,12 @@ option{ color: #000000;
 	    font: Arial; }
 		
 ul    { list-style-type: none; }
+
+input { color: #0000ff;
+	    font: Arial;
+		margin: 0px 5% 0px;
+		font-size:100%;
+		text-align: center;
+		text-shadow: -1px 0 red, 0 1px red, 
+		  1px 0 red, 0 -1px red;
+	    padding: 10px; }

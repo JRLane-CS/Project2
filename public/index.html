@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Movies Search</title>
+    <title id="tab" >Fun Times</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<!--get jquery-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -14,36 +14,46 @@
     <link rel = "stylesheet" type = "text/css" href = "db.css" />
   </head>
   <body>
-    <div class="jumbotron" id="head">
-	  <h1>
-	    Movie search page
+    <div class="jumbotron" id="head" >
+	  <h1 id = "header">
+	    Fun Times
 	  </h1>
 	  <hr>
 	</div>
-    <form id="form-1" >
-      <div>
-        <label for="title">Enter a movie title to search</label>
-        <input type="text" name="title" id="title"/>
-      </div>
-      <div>
-        <button type="button" id="search">Search</button>
-      </div>
+	<div id="functions">
+      <form type = "GET" action = "/getMovie" id="form-1" >
+        <input type = "button" id = "getMovie" value = "Search by Movie" />
+	  </form>
 	  <br/>
-	  <div>
-        <label for="list">Show all movies sorted by:</label>
-		<select id="list" name="list" >
-          <option value="0">Title</option>
-          <option value="1">Year Made</option>
-          <option value="2">Rating</option>
-          <option value="3">Actor</option>
-		  <option value="4">Actress</option>
-        </select>
-      </div>
-	  <div>
-        <button type="button" id="all">Show</button>
-      </div>
-	  <script src="main.js"></script>
-    </form>
+	  <form type = "GET" action = "/getActor" id="form-2" >
+        <input type = "button" id = "getActor" value = "Search by Actor" />
+	  </form>
+	  <br/>
+	  <form type = "GET" action = "/getActress" id="form-3" >
+        <input type = "button" id = "getActress" value = "Search by Actress" />
+	  </form>
+	  <br/>
+	  <form type = "GET" action = "/getRating" id="form-4" >
+        <input type = "button" id = "getRating" value = "Search by Rating" />
+	  </form>
+	  <br/>
+	  <form type = "GET" action = "/deleteMovie" id="form-5" >
+        <input type = "button" id = "deleteMovie" value = "Delete Movie" />
+	  </form>
+	  <br/>
+	  <form type = "GET" action = "/addMovie" id="form-6" >
+        <input type = "button" id = "addMovie" value = "Add Movie" />
+	  </form>
+	  <br/>
+	  <form type = "GET" action = "/updateMovie" id="form-7" >
+        <input type = "button" id = "updateMovie" value = "Update Movie" />
+	  </form>
+	  <br/>
+	  <form type = "GET" action = "/listMovies" id="form-8" >
+        <input type = "button" id = "listMovies" value = "List Movies" />
+	  </form>
+	  <script src="main.js" ></script>
+	</div>
 	<br/>
 	<div>
 	  <hr>
