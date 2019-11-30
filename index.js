@@ -7,7 +7,7 @@ const express = require('express');
 const app = express();
 
 //set heroku configuration variables for my psql database
-var heroconfig = {
+var herokuconfig = {
 user: 'vadwksdgipvswi',
 database: 'd9iendoj9imiad',
 password: 'e0621e7d084c50d0a302890cbbd545b02ef040077f555cf181e580b23e38631b',
