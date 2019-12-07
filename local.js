@@ -63,11 +63,8 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
 app.use(function (req, res, next) {
 
   console.log(req.headers);
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "herokuapp.com"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "POST,DELETE,PUT,GET,OPTIONS");
-  res.header("Access-Control-Allow-Headers", req.headers['access-control-request-headers']);
-  res.header("Access-Control-Request-Method", req.headers['access-control-request-method']);
   next();
 });
 
