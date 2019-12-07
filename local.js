@@ -63,7 +63,7 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
 app.use(function (req, res, next) {
 
   console.log("List: "+req.headers);
-  res.header("Access-Control-Allow-Origin", "herokuapp.com"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "heroku.com");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -176,7 +176,9 @@ app.post("/deleteMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-	singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+	
+  //first query on movie
+  singlequery = dbstring+'WHERE rating.mpaa = $1 ';
     client.query(singlequery, [req.body.rating], function(err, result) {
       done();
       if (err) {
@@ -185,6 +187,34 @@ app.post("/deleteMovie", (req, res) => {
       res.json(result.rows);
       res.end();
     });
+    
+    
+    
+    //query two
+    singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+    client.query(singlequery, [req.body.rating], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.json(result.rows);
+      res.end();
+    });
+    
+    //query three
+    singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+    client.query(singlequery, [req.body.rating], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.json(result.rows);
+      res.end();
+    });
+    
+    
+    
+    
   })
 })
 
