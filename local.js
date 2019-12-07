@@ -62,7 +62,7 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
 
 app.use(function (req, res, next) {
 
-  console.log(req.headers);
+  console.log("List: "+req.headers);
   res.header("Access-Control-Allow-Origin", "herokuapp.com"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
