@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 5000;
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors');
 var cleaner = require('sanitizer');
 
 //set heroku configuration variables for my psql database
@@ -19,9 +20,9 @@ max: 10,
 idleTimeoutMillis: 30000,
 };
 const config = {
-    user: 'jerry',
-    database: 'movies',         
-    port: 5432                  
+  user: 'jerry',
+  database: 'movies',         
+  port: 5432                  
 };
 
 //prepare for post
@@ -58,6 +59,17 @@ var dbstring =
 var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC', 
   'ORDER BY rating.mpaa ASC', 'ORDER BY actor.name ASC', 
   'ORDER BY actress.name ASC'];
+
+app.use(function (req, res, next) {
+
+  console.log(req.headers);
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "POST,DELETE,PUT,GET,OPTIONS");
+  res.header("Access-Control-Allow-Headers", req.headers['access-control-request-headers']);
+  res.header("Access-Control-Request-Method", req.headers['access-control-request-method']);
+  next();
+});
 
 //set express variables
 app.set('port', (PORT));
@@ -142,6 +154,61 @@ app.post("/getRating", (req, res) => {
     });
   })
 })
+
+/*/set /addMovie path and post single query
+app.post("/addMovie", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+	singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+    client.query(singlequery, [req.body.rating], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.json(result.rows);
+      res.end();
+    });
+  })
+})
+
+//set /deleteMovie path and post single query
+app.post("/deleteMovie", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+	singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+    client.query(singlequery, [req.body.rating], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.json(result.rows);
+      res.end();
+    });
+  })
+})
+
+//set /updateMovie path and post single query
+app.post("/updateMovie", (req, res) => {
+  pool.connect(function(err, client, done) {
+    if (err) {
+      return console.error('error fetching client from pool', err);
+    }
+	singlequery = dbstring+'WHERE rating.mpaa = $1 ';
+    client.query(singlequery, [req.body.rating], function(err, result) {
+      done();
+      if (err) {
+        return console.error('error running query', err);
+      }
+      res.json(result.rows);
+      res.end();
+    });
+  })
+})
+*/
 
 //set /getMovies path and get movie list sorted by user selection  
 app.get("/getMovies", (req, res) => {

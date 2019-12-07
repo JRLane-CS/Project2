@@ -131,6 +131,106 @@ $(function() {
     );
   });
   
+  /*/delete movie query
+  $("#deleteDbMovie").click(function(event) {
+    event.preventDefault();
+    $("ul").empty();
+	$.post(
+      `${url}/getMovie`,
+      {
+        title: $("#title").val()
+      },
+      function(json) { 
+        if (json[0] == null)
+		  $("ul").append($("<li>").text(
+            `No database match`
+        ));
+	    else if (json[1] != null)
+		  $("ul").append($("<li>").text(
+            `Which movie do you want to delete?`	
+	      json.forEach(function(row) {
+          $.post(
+            `${url}/getMovie`,
+            {
+            },
+            function(json) {
+              $("ul").append($("<li>").text(
+                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+              ));
+            }
+          );
+        });
+      }
+    );
+  });
+  
+  //add movie to database query
+  $("#addMovieDb").click(function(event) {
+    event.preventDefault();
+    $("ul").empty();
+	$.post(
+      `${url}/getMovie`,
+      {
+        title: $("#title").val(),
+		    year: $("#year").val(),
+		    rating: $("#rating").val(),
+		    actor: $("#actor").val(),
+		    actress: $("#actress").val()
+      },
+      function(json) { 
+        if (json[0] == null)
+		  $("ul").append($("<li>").text(
+            `No database match`
+        ));
+	    else
+	      json.forEach(function(row) {
+          $.post(
+            `${url}/getMovie`,
+            {
+            },
+            function(json) {
+              $("ul").append($("<li>").text(
+                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+              ));
+            }
+          );
+        });
+      }
+    );
+  });
+  
+  //update database movie query
+  $("#updateMovieDb").click(function(event) {
+    event.preventDefault();
+    $("ul").empty();
+	$.post(
+      `${url}/getMovie`,
+      {
+        title: $("#title").val()
+      },
+      function(json) { 
+        if (json[0] == null)
+		  $("ul").append($("<li>").text(
+            `No database match`
+        ));
+	    else
+	      json.forEach(function(row) {
+          $.post(
+            `${url}/getMovie`,
+            {
+            },
+            function(json) {
+              $("ul").append($("<li>").text(
+                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+              ));
+            }
+          );
+        });
+      }
+    );
+  });
+  */
+  
   //list all movies with list sort parameter
   $("#all").click(function(event) {
     event.preventDefault();
@@ -240,17 +340,62 @@ $("#getRating").click(function(event) {
 
 $("#deleteMovie").click(function(event) {
   $("#header").text("Delete Movie"); 
-  $("#functions").empty(); 	
+  $("#functions").empty();
+  $("#functions").html(
+	'<form name="form-1">'+
+	'<div>'+
+    '<label for="delete">Enter movie to delete</label>'+
+    '<input type="text" name="delete" id="delete"/>'+
+    '</div>'+
+    '<div>'+
+    '<button type="button" id="deleteDbMovie" >Delete</button>'+
+    '</div>'+
+    '</form>'+
+	'<script src="main.js" ></script>'
+  );
+  //if more than one, make selectable
+  //then add verification "are you sure?" and two buttons yes and no 
 })
 
 $("#addMovie").click(function(event) {
   $("#header").text("Add Movie"); 
-  $("#functions").empty(); 	
+  $("#functions").empty();
+  addMovie();
+  $("#functions").append(
+    '<div>'+
+    '<button type="button" id="addMovieDb" >Enter</button>'+
+    '</div>'+
+    '</form>'+
+	'<script src="main.js" ></script>'
+	);  
 })
 
 $("#updateMovie").click(function(event) {
   $("#header").text("Update Movie"); 
-  $("#functions").empty(); 	
+  $("#functions").empty();
+  $("#functions").html(
+	'<form name="form-1">'+
+	'<div>'+
+    '<label for="update">Enter movie to update</label>'+
+    '<input type="text" name="update" id="update"/>'+
+    '</div>'+
+    '<div>'+
+    '<button type="button" id="updateMovieDb" >Update</button>'+
+    '</div>'+
+    '</form>'+
+	'<script src="main.js" ></script>'
+  );
+  
+  //after movie is selected
+  //addMovie();
+  //$("#functions").append(
+  //  '<div>'+
+  //  '<button type="button" id="updateMovies" >Enter</button>'+
+  //  '</div>'+
+  //  '</form>'+
+  //'<script src="main.js" ></script>'
+  //);
+  //populate inputs with movie data values  
 })
 
 $("#listMovies").click(function(event) {
@@ -275,3 +420,29 @@ $("#listMovies").click(function(event) {
     '<script src="main.js" ></script>'	
   );
 })
+
+function addMovie() {
+  $("#functions").html(
+	'<form name="form-1">'+
+	'<div>'+
+    '<label for="title">Enter movie title</label>'+
+    '<input type="text" name="title" id="title"/>'+
+    '</div>'+
+	'<div>'+
+    '<label for="year">Enter year made</label>'+
+    '<input type="number" name="year" id="year"/>'+
+    '</div>'+
+	'<div>'+
+    '<label for="rating">Enter movie rating</label>'+
+    '<input type="text" name="rating" id="rating"/>'+
+    '</div>'+
+	'<div>'+
+    '<label for="actor">Enter lead actor</label>'+
+    '<input type="text" name="actor" id="actor"/>'+
+    '</div>'+
+	'<div>'+
+    '<label for="actress">Enter lead actress</label>'+
+    '<input type="text" name="actress" id="actress"/>'+
+    '</div>'
+  );	
+}
