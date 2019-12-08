@@ -11,7 +11,8 @@ $(function() {
   $("#searchMovie").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.get(
+    $("#output").empty();
+	  $.get(
       `${url}/getMovie`,
       {
         title: $("#title").val()
@@ -42,7 +43,8 @@ $(function() {
   $("#searchActor").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.get(
+    $("#output").empty();
+	  $.get(
       `${url}/getActor`,
       {
         actor: $("#actor").val()
@@ -69,11 +71,12 @@ $(function() {
     );
   });
   
-  //single query actor based
+  //single query actress based
   $("#searchActress").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.get(
+    $("#output").empty();
+	  $.get(
       `${url}/getActress`,
       {
         actress: $("#actress").val()
@@ -104,7 +107,8 @@ $(function() {
   $("#searchRating").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.post(
+    $("#output").empty();
+	  $.post(
       `${url}/getRating`,
       {
         rating: $("#rating").val()
@@ -131,44 +135,54 @@ $(function() {
     );
   });
   
-  /*/delete movie query
+  //delete movie query
   $("#deleteDbMovie").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.post(
+    $("#output").empty();
+	  $.get(
       `${url}/getMovie`,
       {
-        title: $("#title").val()
+        title: $("#delete").val()
       },
       function(json) { 
-        if (json[0] == null)
-		  $("ul").append($("<li>").text(
+        if (json[0] == null) {
+		      $("ul").append($("<li>").text(
             `No database match`
-        ));
-	    else if (json[1] != null)
-		  $("ul").append($("<li>").text(
-            `Which movie do you want to delete?`	
-	      json.forEach(function(row) {
-          $.post(
+          ));
+        }
+        else {
+		      $("ul").append($("<li>").text(
+            `- Click on movie to delete. -`
+          ));   
+        }        
+	      json.forEach(function(r) {
+          $.get(
             `${url}/getMovie`,
             {
+              title: $("#delete").val()
             },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
+            function(json) 
+              {
+              $("<li>", {"style" : "cursor: pointer;", 
+                        "value" : r.id, 
+                        "id":"movieId"}).attr( "r-title", r.title ).text(
+                `${r.title},  ${r.year},  ${r.rating},  ${r.actor},  ${r.actress}`
+              ).appendTo( "ul" );
+            }  
           );
         });
       }
     );
   });
   
+
+  
   //add movie to database query
   $("#addMovieDb").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.post(
+	  $.get(
       `${url}/getMovie`,
       {
         title: $("#title").val(),
@@ -177,25 +191,7 @@ $(function() {
 		    actor: $("#actor").val(),
 		    actress: $("#actress").val()
       },
-      function(json) { 
-        if (json[0] == null)
-		  $("ul").append($("<li>").text(
-            `No database match`
-        ));
-	    else
-	      json.forEach(function(row) {
-          $.post(
-            `${url}/getMovie`,
-            {
-            },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
-          );
-        });
-      }
+      next()
     );
   });
   
@@ -203,39 +199,26 @@ $(function() {
   $("#updateMovieDb").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.post(
-      `${url}/getMovie`,
+	  $.get(
+      `${url}/updateMovie`,
       {
-        title: $("#title").val()
+        title:   $("#title").val(),
+        year:    $("#year"),
+        rating:  $("#rating"),
+        actor:   $("#actor"),
+        actress: $("#actress")
       },
-      function(json) { 
-        if (json[0] == null)
-		  $("ul").append($("<li>").text(
-            `No database match`
-        ));
-	    else
-	      json.forEach(function(row) {
-          $.post(
-            `${url}/getMovie`,
-            {
-            },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
-          );
-        });
-      }
+      next()
     );
   });
-  */
+
   
   //list all movies with list sort parameter
   $("#all").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	$.get(
+    $("#output").empty();
+	  $.get(
       `${url}/getMovies`,
       {
         list: $("#list").val()
@@ -258,14 +241,41 @@ $(function() {
   });
 });
 
+//possible movie for deletion selected, make sure user wants to delete
+$("#movieId").click(function(event) {
+  event.preventDefault();
+  $("#functions").html(
+    '<br/><br/>'+
+    '<p>Are you sure?</p><br/>'+
+    '<span><p>'+
+    '<input type="button" id="deleteTrue" value="/>'+
+    '<input type="button" id="deleteFalse">'+
+    '</p></span>'
+  );
+});
 
+//button handler for user deletion uncertainty, just go to root screen
+$("#deleteFalse").click(function(event) {
+  event.preventDefault();
+  $(location).attr('href',url);
+});
+
+//button handler for user certainty, so send data to server for deletion
+$("#deleteTrue").click(function(event) {
+  event.preventDefault();
+  //send data to server needed to delete the value (movie.id) of $("#movieId") 
+  //then arrange redirect to '/' (fun-times-project2 root)
+});   
+
+//entry page for movie search
 $("#getMovie").click(function(event) {
-    event.preventDefault();
-    $("#header").text("Search by Movie Title");
-    $("#functions").empty();
-    $("#functions").html(
-	'<form name="form-1">'+
-	'<div>'+
+  event.preventDefault();
+  $("#header").text("Search by Movie Title");
+  $("#functions").empty();
+  $("#output").empty();
+  $("#functions").html(
+	  '<form name="form-1">'+
+    '<div>'+
     '<label for="title">Enter a movie title to search</label>'+
     '<input type="text" name="title" id="title"/>'+
     '</div>'+
@@ -273,17 +283,19 @@ $("#getMovie").click(function(event) {
     '<button type="button" id="searchMovie" >Search</button>'+
     '</div>'+
     '</form>'+
-	'<script src="main.js" ></script>'
+	  '<script src="main.js" ></script>'
   );
 });
-  
+
+//entry page for actor search  
 $("#getActor").click(function(event) {
   event.preventDefault();
   $("#header").text("Search by Actor"); 
   $("#functions").empty();
+  $("#output").empty();
   $("#functions").html(
-	'<form name="form-1">'+
-	'<div>'+
+	  '<form name="form-1">'+
+	  '<div>'+
     '<label for="actor">Enter an actor name to search</label>'+
     '<input type="text" name="actor" id="actor"/>'+
     '</div>'+
@@ -291,17 +303,19 @@ $("#getActor").click(function(event) {
     '<button type="button" id="searchActor" >Search</button>'+
     '</div>'+
     '</form>'+
-	'<script src="main.js" ></script>'
+	  '<script src="main.js" ></script>'
   );  
 })
 
+//entry page for actress search
 $("#getActress").click(function(event) {
   event.preventDefault();
   $("#header").text("Search by Actress"); 
   $("#functions").empty();
+  $("#output").empty();
   $("#functions").html(
-	'<form name="form-1">'+
-	'<div>'+
+	  '<form name="form-1">'+
+	  '<div>'+
     '<label for="actress">Enter an actress name to search</label>'+
     '<input type="text" name="actress" id="actress"/>'+
     '</div>'+
@@ -309,17 +323,19 @@ $("#getActress").click(function(event) {
     '<button type="button" id="searchActress" >Search</button>'+
     '</div>'+
     '</form>'+
-	'<script src="main.js" ></script>'
+	  '<script src="main.js" ></script>'
   );  
 })
 
+//entry page for rating search
 $("#getRating").click(function(event) {
   event.preventDefault();
   $("#header").text("Search by Rating"); 
   $("#functions").empty();
+  $("#output").empty();
   $("#functions").html(
-	'<form method="post" name="form-1">'+
-	'<div>'+
+	  '<form method="post" name="form-1">'+
+	  '<div>'+
     '<label for="rating">Select a rating to search</label>'+
     '<select id="rating" name="rating" >'+
     '<option value="G">G</option>'+
@@ -334,16 +350,18 @@ $("#getRating").click(function(event) {
     '<button type="button" id="searchRating" >Search</button>'+
     '</div>'+
     '</form>'+
-	'<script src="main.js" ></script>'
+	  '<script src="main.js" ></script>'
   );    
 })
 
+//entry page for movie deletion
 $("#deleteMovie").click(function(event) {
   $("#header").text("Delete Movie"); 
   $("#functions").empty();
+  $("#output").empty();
   $("#functions").html(
-	'<form name="form-1">'+
-	'<div>'+
+	  '<form name="form-1">'+
+	  '<div>'+
     '<label for="delete">Enter movie to delete</label>'+
     '<input type="text" name="delete" id="delete"/>'+
     '</div>'+
@@ -351,31 +369,35 @@ $("#deleteMovie").click(function(event) {
     '<button type="button" id="deleteDbMovie" >Delete</button>'+
     '</div>'+
     '</form>'+
-	'<script src="main.js" ></script>'
+	  '<script src="main.js" ></script>'
   );
-  //if more than one, make selectable
-  //then add verification "are you sure?" and two buttons yes and no 
 })
+//need secondary code to handle main.js insertion after possible deletions
+// are listed
 
+//entry page to add movie
 $("#addMovie").click(function(event) {
   $("#header").text("Add Movie"); 
   $("#functions").empty();
+  $("#output").empty();
   addMovie();
   $("#functions").append(
     '<div>'+
     '<button type="button" id="addMovieDb" >Enter</button>'+
     '</div>'+
     '</form>'+
-	'<script src="main.js" ></script>'
+	  '<script src="main.js" ></script>'
 	);  
 })
 
+//entry page for movie update
 $("#updateMovie").click(function(event) {
   $("#header").text("Update Movie"); 
   $("#functions").empty();
+  $("#output").empty();
   $("#functions").html(
-	'<form name="form-1">'+
-	'<div>'+
+	  '<form name="form-1">'+
+	  '<div>'+
     '<label for="update">Enter movie to update</label>'+
     '<input type="text" name="update" id="update"/>'+
     '</div>'+
@@ -383,9 +405,9 @@ $("#updateMovie").click(function(event) {
     '<button type="button" id="updateMovieDb" >Update</button>'+
     '</div>'+
     '</form>'+
-	'<script src="main.js" ></script>'
+	  '<script src="main.js" ></script>'
   );
-  
+  //check code for working delete to help with clues for the following:
   //after movie is selected
   //addMovie();
   //$("#functions").append(
@@ -398,16 +420,18 @@ $("#updateMovie").click(function(event) {
   //populate inputs with movie data values  
 })
 
+//entry page to show movie list sorted by user selection
 $("#listMovies").click(function(event) {
   event.preventDefault();
   $("#header").text("List Movies"); 
   $("#functions").empty(); 
+  $("#output").empty();
   $("#functions").html(
     '<form name="form-1">'+
     '<label for="list">Show all movies sorted by:</label>'+
     '<select id="list" name="list" >'+
     '<option value="0">Title</option>'+
-	'<option value="1">Year Made</option>'+
+	  '<option value="1">Year Made</option>'+
     '<option value="2">Rating</option>'+
     '<option value="3">Actor</option>'+
     '<option value="4">Actress</option>'+
@@ -421,26 +445,27 @@ $("#listMovies").click(function(event) {
   );
 })
 
+//detailed input page for adding or updating a movie to the database
 function addMovie() {
   $("#functions").html(
-	'<form name="form-1">'+
-	'<div>'+
+	  '<form name="form-1">'+
+	  '<div>'+
     '<label for="title">Enter movie title</label>'+
     '<input type="text" name="title" id="title"/>'+
     '</div>'+
-	'<div>'+
+	  '<div>'+
     '<label for="year">Enter year made</label>'+
     '<input type="number" name="year" id="year"/>'+
     '</div>'+
-	'<div>'+
+	  '<div>'+
     '<label for="rating">Enter movie rating</label>'+
     '<input type="text" name="rating" id="rating"/>'+
     '</div>'+
-	'<div>'+
+	  '<div>'+
     '<label for="actor">Enter lead actor</label>'+
     '<input type="text" name="actor" id="actor"/>'+
     '</div>'+
-	'<div>'+
+	  '<div>'+
     '<label for="actress">Enter lead actress</label>'+
     '<input type="text" name="actress" id="actress"/>'+
     '</div>'
