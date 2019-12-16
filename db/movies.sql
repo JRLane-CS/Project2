@@ -80,13 +80,9 @@ INSERT INTO actor(name) VALUES ('Ryan Reynolds');
 
 INSERT INTO actress(name) VALUES ('Blake Lively');
 
-INSERT INTO actor(name) VALUES ('Ryan Reynolds');
-
 INSERT INTO actress(name) VALUES ('Mary-Louise Parker');
 
 INSERT INTO actor(name) VALUES ('Anthony Hopkins');
-
-INSERT INTO actress(name) VALUES ('Gweneth Paltrow');
 
 INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES ('Iron Man', 2008, 3, 1, 1);
 
@@ -108,7 +104,7 @@ INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES ('Green L
 
 INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES ('R.I.P.D.', 2013, 3, 9, 10);
 
-INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES ('Proof', 2005, 3, 11, 1);
+INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES ('Proof', 2005, 3, 10, 1);
 
 
 
@@ -166,11 +162,11 @@ SELECT
 
 /* List alphabetically by actress name */
 SELECT 
-    movie.id AS id,
+  movie.id AS id,
 	movie.title AS title,
-    movie.made AS year,
+  movie.made AS year,
 	rating.mpaa AS rating,
-    actor.name AS actor,
+  actor.name AS actor,
 	actress.name AS actress
   FROM 
     movie

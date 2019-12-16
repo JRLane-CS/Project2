@@ -1,12 +1,18 @@
+//set url for server
+var url = window.location.hostname.startsWith("localhost")
+  ? "http://localhost:5000"
+  : "https://fun-times-project2.herokuapp.com";
 
+//set global variables for easy function transference    
+var title;
+var movieId;
+var ratingId;
+var actorId;
+var actressId;
 
+//base db functions through server
 $(function() {
-  
-  //set url for server
-  var url = window.location.hostname.startsWith("localhost")
-    ? "http://localhost:5000"
-    : "https://fun-times-project2.herokuapp.com";
-  
+   
   //single query title based
   $("#searchMovie").click(function(event) {
     event.preventDefault();
@@ -23,17 +29,10 @@ $(function() {
             `No database match`
         ));
 	    else
-	      json.forEach(function(row) {
-          $.get(
-            `${url}/getMovie`,
-            {
-            },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
-          );
+	      json.forEach(function(row) {         
+          $("ul").append($("<li>").text(
+            `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+          ));  
         });
       }
     );
@@ -55,17 +54,10 @@ $(function() {
             `No database match`
         ));
 	    else
-	      json.forEach(function(row) {
-          $.get(
-            `${url}/getActor`,
-            {
-            },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
-          );
+	      json.forEach(function(row) {        
+          $("ul").append($("<li>").text(
+            `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+          ));  
         });
       }
     );
@@ -88,20 +80,13 @@ $(function() {
         ));
 	    else
 	      json.forEach(function(row) {
-          $.get(
-            `${url}/getActress`,
-            {
-            },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
-          );
-        });
+          $("ul").append($("<li>").text(
+            `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+          ));
+        })
       }
-    );
-  });
+    )}
+  );
   
   //single query rating based
   $("#searchRating").click(function(event) {
@@ -120,23 +105,16 @@ $(function() {
         ));
 	    else
 	      json.forEach(function(row) {
-          $.post(
-            `${url}/getRating`,
-            {
-            },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
-          );
+          $("ul").append($("<li>").text(
+            `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+          ));  
         });
       }
     );
   });
   
   //delete movie query
-  $("#deleteDbMovie").click(function(event) {
+  $("#deleteDbMovieQuery").click(function(event) {
     event.preventDefault();
     $("ul").empty();
     $("#output").empty();
@@ -152,66 +130,162 @@ $(function() {
           ));
         }
         else {
-		      $("ul").append($("<li>").text(
+		      $("ul").append($("<li class='center'>").text(
             `- Click on movie to delete. -`
           ));   
         }        
 	      json.forEach(function(r) {
-          $.get(
-            `${url}/getMovie`,
-            {
-              title: $("#delete").val()
-            },
-            function(json) 
-              {
-              $("<li>", {"style" : "cursor: pointer;", 
-                        "value" : r.id, 
-                        "id":"movieId"}).attr( "r-title", r.title ).text(
-                `${r.title},  ${r.year},  ${r.rating},  ${r.actor},  ${r.actress}`
-              ).appendTo( "ul" );
-            }  
-          );
+          $("<li>", {"style" : "cursor: pointer;", 
+            "value" : r.id, 
+            "id":"movieId"}).attr( "r-title", r.title ).text(
+            `${r.title},  ${r.year},  ${r.rating},  ${r.actor},  ${r.actress}`
+          ).click(function (){ beSure(r.title, r.id, r.ratingid, r.actorid, r.actressid); }).appendTo( "ul" ); 
         });
       }
     );
   });
   
-
+  //delete movie from database
+  $("#deleteTrue").click(function(event) {
+    event.preventDefault();
+    $("ul").empty();
+    $("#output").empty();    
+    $.post(
+      `${url}/deleteMovie`,
+      {
+        movieId:   movieId,
+        ratingId:  ratingId,
+        actorId:   actorId,
+        actressId: actressId
+      });
+    
+    //let user know the deletion is finished
+    $("#output").html(
+      '<br/>'+
+      '<h1><b>'+title+' has been deleted!</b></h1>'
+    );
+    
+    //wait a couple seconds for user to see message then go to root
+    setTimeout(function() {
+      $(location).attr('href',url);
+    }, 2000);    
+  });
   
   //add movie to database query
   $("#addMovieDb").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	  $.get(
-      `${url}/getMovie`,
+	  $.post(
+      `${url}/addMovie`,
       {
-        title: $("#title").val(),
-		    year: $("#year").val(),
-		    rating: $("#rating").val(),
-		    actor: $("#actor").val(),
-		    actress: $("#actress").val()
-      },
-      next()
+        title: $("#titleIn").val(),
+		    year: $("#yearIn").val(),
+		    rating: $("#ratingIn").val(),
+		    actor: $("#actorIn").val(),
+		    actress: $("#actressIn").val()
+      }
     );
+  });
+  
+  //add movie to database query
+  $("#addMovieDbNew").click(function(event) {
+    event.preventDefault();
+    $("ul").empty();
+	  
+    //insert rating into db if not there
+    $.post(
+      `${url}/insertRating`,
+      {
+		    rating: $("#ratingIn").val()
+      },
+      function (json){ 
+      }
+    );
+    
+    //insert actor into db if not there
+    $.post(
+      `${url}/insertActor`,
+      {
+		    actor: $("#actorIn").val()
+      },
+      function (json){  
+      }
+    );
+    
+    //insert actress into db if not there
+    $.post(
+      `${url}/insertActress`,
+      {
+		    actress: $("#actressIn").val()
+      },
+      function (json){  
+      }
+    );
+   
+
+    //get ids for rating, actor, and actress    
+    $.post(
+      `${url}/checkRating`,
+      {
+		    rating: $("#ratingIn").val()
+      },
+      function (json){
+        ratingId = json[0].id;  
+      }
+    );
+    $.post(
+      `${url}/checkActor`,
+      {
+		    actor: $("#actorIn").val()
+      },
+      function (json){
+        actorId = json[0].id;  
+      }
+    );
+    $.post(
+      `${url}/checkActress`,
+      {
+		    actress: $("#actressIn").val()
+      },
+      function (json){
+        actressId = json[0].id;
+      }
+    );
+    
+    
+    //insert movie into database
+    $.post(
+      `${url}/insertMovie`,
+      {
+		    title: $("#titleIn").val(),
+		    year: $("#yearIn").val(),
+        ratingId: ratingId,
+        actorId: actorId,
+        actressId: actressId
+      },
+      function (json){   
+      }
+    );
+  
+  
   });
   
   //update database movie query
   $("#updateMovieDb").click(function(event) {
     event.preventDefault();
     $("ul").empty();
-	  $.get(
+	  $.post(
       `${url}/updateMovie`,
       {
-        title:   $("#title").val(),
-        year:    $("#year"),
-        rating:  $("#rating"),
-        actor:   $("#actor"),
-        actress: $("#actress")
+        title:   $("#titleIn").val(),
+        year:    $("#yearIn"),
+        rating:  $("#ratingIn"),
+        actor:   $("#actorIn"),
+        actress: $("#actressIn")
       },
       next()
     );
   });
-
   
   //list all movies with list sort parameter
   $("#all").click(function(event) {
@@ -225,47 +299,41 @@ $(function() {
       },
       function(json) {
         json.forEach(function(row) {
-          $.get(
-            `${url}/getMovie`,
-            {
-            },
-            function(json) {
-              $("ul").append($("<li>").text(
-                `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
-              ));
-            }
-          );
+          $("ul").append($("<li>").text(
+            `${row.title},  ${row.year},  ${row.rating},  ${row.actor},  ${row.actress}`
+          ));  
         });
       }
     );
   });
 });
 
-//possible movie for deletion selected, make sure user wants to delete
-$("#movieId").click(function(event) {
-  event.preventDefault();
-  $("#functions").html(
-    '<br/><br/>'+
-    '<p>Are you sure?</p><br/>'+
-    '<span><p>'+
-    '<input type="button" id="deleteTrue" value="/>'+
-    '<input type="button" id="deleteFalse">'+
-    '</p></span>'
+/* Following functions are strictly for document manipulation */
+
+//insure deletion is correct
+function beSure(movie, id, rating, actor, actress){
+  $("#output").empty();
+  $("#output").html(
+    '<br/>'+
+    '<p><b>Are you sure?</b></p>'+
+    '<button class = "center" type="button" id="deleteTrue" value='+id+
+    '> Yes </button>'+
+    '<button class = "center" type="button" id="deleteFalse"> No '+
+    '</button>'+
+    '<script src="main.js" ></script>'
   );
-});
+  title = movie;
+  movieId = id;
+  ratingId = rating;
+  actorId = actor;
+  actressId = actress;
+}
 
 //button handler for user deletion uncertainty, just go to root screen
 $("#deleteFalse").click(function(event) {
   event.preventDefault();
   $(location).attr('href',url);
-});
-
-//button handler for user certainty, so send data to server for deletion
-$("#deleteTrue").click(function(event) {
-  event.preventDefault();
-  //send data to server needed to delete the value (movie.id) of $("#movieId") 
-  //then arrange redirect to '/' (fun-times-project2 root)
-});   
+});  
 
 //entry page for movie search
 $("#getMovie").click(function(event) {
@@ -366,18 +434,15 @@ $("#deleteMovie").click(function(event) {
     '<input type="text" name="delete" id="delete"/>'+
     '</div>'+
     '<div>'+
-    '<button type="button" id="deleteDbMovie" >Delete</button>'+
+    '<button type="button" id="deleteDbMovieQuery" >Delete</button>'+
     '</div>'+
     '</form>'+
 	  '<script src="main.js" ></script>'
   );
 })
-//need secondary code to handle main.js insertion after possible deletions
-// are listed
 
 //entry page to add movie
-$("#addMovie").click(function(event) {
-  $("#header").text("Add Movie"); 
+$("#addMovie").click(function(event) { 
   $("#functions").empty();
   $("#output").empty();
   addMovie();
@@ -451,23 +516,23 @@ function addMovie() {
 	  '<form name="form-1">'+
 	  '<div>'+
     '<label for="title">Enter movie title</label>'+
-    '<input type="text" name="title" id="title"/>'+
+    '<input type="text" name="title" id="titleIn"/>'+
     '</div>'+
 	  '<div>'+
     '<label for="year">Enter year made</label>'+
-    '<input type="number" name="year" id="year"/>'+
+    '<input type="number" name="year" id="yearIn"/>'+
     '</div>'+
 	  '<div>'+
     '<label for="rating">Enter movie rating</label>'+
-    '<input type="text" name="rating" id="rating"/>'+
+    '<input type="text" name="rating" id="ratingIn"/>'+
     '</div>'+
 	  '<div>'+
     '<label for="actor">Enter lead actor</label>'+
-    '<input type="text" name="actor" id="actor"/>'+
+    '<input type="text" name="actor" id="actorIn"/>'+
     '</div>'+
 	  '<div>'+
     '<label for="actress">Enter lead actress</label>'+
-    '<input type="text" name="actress" id="actress"/>'+
+    '<input type="text" name="actress" id="actressIn"/>'+
     '</div>'
   );	
 }

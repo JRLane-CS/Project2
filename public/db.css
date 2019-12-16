@@ -1,53 +1,73 @@
 h1    { color: #ffffff;
-		text-align: center;
-		font: 200% Arial;
-		padding:10px 0px 0px;
-		text-shadow: -1px 0 black, 0 1px black, 
-		  1px 0 black, 0 -1px black; }
+		    text-align: center;
+		    font: 200% Arial;
+		    padding:10px 0px 0px;
+		    text-shadow: -1px 0 black, 0 1px black, 
+		      1px 0 black, 0 -1px black; }
 
 label
       { color: #ffffff;
-	    font: Arial;
-		margin: 0px;
-		font-size:125%;
-		text-align: left;
-		text-shadow: -1px 0 black, 0 1px black, 
-		  1px 0 black, 0 -1px black;
-	    padding: 0px; }
+	      font: Arial;
+		    margin: 0px;
+		    font-size:125%;
+		    text-align: left;
+		    text-shadow: -1px 0 black, 0 1px black, 
+		      1px 0 black, 0 -1px black;
+	      padding: 0px; }
 		
 li    { color: #ffffff;
-	    font: Arial;
-		margin: 0px;
-		font-size:125%;
-		text-align: left;
-		text-shadow: -1px 0 black, 0 1px black, 
-		  1px 0 black, 0 -1px blue;
-	    padding: 0px 25%; }		
+	      font: Arial;
+		    margin: 0px;
+		    font-size:125%;
+		    text-align: left;
+		    text-shadow: -1px 0 black, 0 1px black, 
+		      1px 0 black, 0 -1px black;
+	      padding: 0px 25%; }		
 		
 body  { background: linear-gradient(#7daaff, #0000ff, #7daaff) fixed;
-		background-repeat: repeat-x;
-		color: #000000;
-		font-family: Arial;
-		font-size: 18px;
+		    background-repeat: repeat-x;
+		    color: #000000;
+		    font-family: Arial;
+		    font-size: 18px;
         text-align: left; }
 		
 #head { background: linear-gradient(#ff0000, #ffaaaa, #ff0000) fixed;
-		background-repeat: repeat-x;
-		color: #ffffff;
-		font-family: Arial;
-		font-size: 18px;
+		    background-repeat: repeat-x;
+		    color: #ffffff;
+		    font-family: Arial;
+		    font-size: 18px;
         text-align: left; }
 		
 option{ color: #000000;
-	    font: Arial; }
+	      font: Arial; }
 		
 ul    { list-style-type: none; }
 
 input { color: #0000ff;
-	    font: Arial;
-		margin: 0px 5% 0px;
-		font-size:100%;
-		text-align: center;
-		text-shadow: -1px 0 red, 0 1px red, 
-		  1px 0 red, 0 -1px red;
-	    padding: 10px; }
+	      font: Arial;
+		    margin: 0px 5% 0px;
+		    font-size:100%;
+		    text-align: center;
+		    text-shadow: -1px 0 red, 0 1px red, 
+		      1px 0 red, 0 -1px red;
+	      padding: 10px; }
+      
+p
+      { color: #ffffff;
+	      font: Arial;
+		    margin: 0px auto;
+		    font-size:125%;
+		    text-align: center;
+		    text-shadow: -1px 0 black, 0 1px black, 
+		      1px 0 black, 0 -1px black;
+	      padding: 0px 25%; }
+
+.center 
+      { text-align: center; 
+        margin: auto;
+        display: block; }
+
+button{ color: #ffffff; 
+        text-shadow: -1px 0 black, 0 1px black, 
+		      1px 0 black, 0 -1px black; }        
+         
