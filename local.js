@@ -63,7 +63,7 @@ var category = ['ORDER BY movie.title ASC', 'ORDER BY movie.made ASC',
   'ORDER BY rating.mpaa ASC', 'ORDER BY actor.name ASC', 
   'ORDER BY actress.name ASC'];
   
-/*/create global variables for holding data
+//create global variables for holding data
 var id;
 var title;
 var made;
@@ -74,7 +74,7 @@ var queryResult;
 var results;
 var ratingId = 0;
 var actorId = 0;
-var actressId = 0;*/
+var actressId = 0;
 
 app.use(function (req, res, next) {
 
@@ -173,111 +173,122 @@ app.post("/updateMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    var id = req.query.id;
-    var title = req.query.title;
-    var made = req.query.year;
-    var rating = req.query.rating;
-    var actor = req.query.actor;
-    var actress = req.query.actress;
-    var actress_id;
-    var rating_id;
-    var actor_id;
-	  
-    //rating query
-    var ratingquery = 'SELECT * FROM rating WHERE mpaa = '+rating;
-    client.query(ratingquery, function(err, result) {
-      done();
+    var id = req.body.id;
+    var title = req.body.title;
+    var made = req.body.year;
+    var rating = req.body.rating;
+    var actor = req.body.actor;
+    var actress = req.body.actress;
+    var actress_id = req.body.actressId;
+    var rating_id = req.body.ratingId;
+    var actor_id = req.body.actorId;
+    
+    //check for rating 
+    ratingQuery = "SELECT * FROM rating WHERE mpaa = '"+rating+"'";
+    client.query(ratingQuery, function(err, result) {
       if (err) {
-        return console.error('error running query', err);
+       return console.error('error running rating table query', err);
       }
-    });
-    
-    //if not there, insert and get new rating id
-    if (result == null){
-      ratingquery = 'INSERT INTO rating(mpaa) VALUES ('+rating+') RETURNING id';
-      client.query(ratingquery, function(err, result) {
-        done();
-        if (err) {
-          return console.error('error running query', err);
-        }
-      });
-      rating_id = result;
-    }
-    
-    //else get rating id
-    else
-    {
-      rating_id = rating.id;
-    }
-    
-    //actor query
-    var actorquery = 'SELECT * FROM actor WHERE name = '+actor;
-    client.query(actorquery, function(err, result) {
-      done();
-      if (err) {
-        return console.error('error running query', err);
+       
+      //if not there add rating to table
+      if (result.rows[0] === undefined) { 
+        ratingAddQuery = "INSERT INTO rating(mpaa) VALUES ('"+rating+"') RETURNING id";
+        client.query(ratingAddQuery, function(err, result) {
+          if (err) {
+	          return console.error('error running rating insert query', err);
+          } 
+          
+          //assign rating.id to variable
+          ratingId = result.rows[0].id;          
+        });        
       }
+      else {
+        
+        //assign rating.id to variable
+        ratingId = result.rows[0].id;
+      }        
+    
+      
+        //check for actor
+        actorQuery = "SELECT * FROM actor WHERE name = '"+actor+"'";
+        client.query(actorQuery, function(err, result) {
+          if (err) {
+            return console.error('error running actor table query', err);
+          }
+       
+          //if not there add actor to table
+          if (result.rows[0] === undefined) { 
+            actorAddQuery = "INSERT INTO actor(name) VALUES ('"+actor+"') RETURNING id";
+            client.query(actorAddQuery, function(err, result) {
+              if (err) {
+	              return console.error('error running actor insert query', err);
+              }
+          
+              //assign actor.id to variable          
+              actorId = result.rows[0].id;          
+            }); 
+          }
+          else {
+        
+            //assign actor.id to variable
+            actorId = result.rows[0].id;
+          }
+    
+            //check for actress
+            actressQuery = "SELECT * FROM actress WHERE name = '"+actress+"'";
+            client.query(actressQuery, function(err, result) {
+              if (err) {
+                return console.error('error running actress table query', err);
+              }
+       
+              //if not there add actress to table
+              if (result.rows[0] === undefined) { 
+                actressAddQuery = "INSERT INTO actress(name) VALUES ('"+actress+"') RETURNING id";
+                client.query(actressAddQuery, function(err, result) {
+                  if (err) {
+	                  return console.error('error running actress insert query', err);
+                  }
+          
+                  //assign actressId id from table
+                  actressId = result.rows[0].id;
+          
+                  //update movie in the database
+                  updateMovieQuery = "UPDATE movie SET title = '"+title+
+                    "', made = '"+made+"', rating_id = '"+ratingId+
+                    "', actor_id = '"+actorId+"', actress_id = '"+actressId+
+                    "' WHERE id = '"+id+"'";
+                  client.query(updateMovieQuery, function(err, result) {
+                    if (err) {
+	                    return console.error('error running movie insert query', err);
+                    }  
+                  });          
+                }); 
+              }
+              else {
+      
+                //assign actress.id to variable
+                actressId = result.rows[0].id;
+        
+                //update movie in the database
+                updateMovieQuery = "UPDATE movie SET title = '"+title+
+                  "', made = '"+made+"', rating_id = '"+ratingId+
+                  "', actor_id = '"+actorId+"', actress_id = '"+actressId+
+                  "' WHERE id = '"+id+"'";
+                client.query(updateMovieQuery, function(err, result) {
+                  if (err) {
+	                  return console.error('error running movie insert query', err);
+                  }  
+                });          
+              }
+            });    
+        });
     });
+
+    //close pool connection
+    done();
     
-    //if not there, insert and get new id
-    if (result == null){
-      actorquery = 'INSERT INTO actor(name) VALUES ('+actor+') RETURNING id';
-      client.query(actorquery, function(err, result) {
-        done();
-        if (err) {
-          return console.error('error running query', err);
-        }
-      });
-      actor_id = result;
-    }
-    
-    //otherwise, get actor id
-    else
-    {
-      actor_id = actor.id;
-    }
-    
-    //actress query
-    var actressquery = 'SELECT * FROM actress WHERE name = '+actress;
-    client.query(actressquery, function(err, result) {
-      done();
-      if (err) {
-        return console.error('error running query', err);
-      }
-    });
-    
-    //if not there, insert and get new id
-    if (result == null){
-      actressquery = 'INSERT INTO actress(name) VALUES ('+actress+') RETURNING id';
-      client.query(actressquery, function(err, result) {
-        done();
-        if (err) {
-          return console.error('error running query', err);
-        }
-      });
-      actress_id = result;
-    }
-    
-    //if there, get actress id
-    else
-    {
-      actress_id = actress.id;
-    }
-    
-    //update movie in db
-    singlequery = 'UPDATE movies SET movie.title = '+title+
-      ', movie.made = '+made+
-      ', movie.rating = '+rating_id+
-      ', movie.actor = '+actor_id+
-      ', movie.actress = '+actress_id+
-      ' WHERE movie.id = '+id;
-    client.query(singlequery, function(err, result) {
-      done();
-      if (err) {
-        return console.error('error running query', err);
-      }
-      res.end();
-    });
+    //end response
+    res.end();  
   })
 })
   
@@ -368,13 +379,10 @@ app.post("/deleteMovie", (req, res) => {
 
 //set /addMovies path and add user input movie  
 app.post("/addMovie", (req, res) => {
-  var ratingId, actorId, actressId;
-  //connect to database pool
   pool.connect(function(err, client, done) {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    
     //get variables for deletion operations
     title = req.body.title;
     made = req.body.year;
@@ -396,69 +404,89 @@ app.post("/addMovie", (req, res) => {
           if (err) {
 	          return console.error('error running rating insert query', err);
           } 
-//assign rating.id to variable
-      ratingId = result.rows[0].id;          
+          
+          //assign rating.id to variable
+          ratingId = result.rows[0].id;          
         });        
       }
-      else
+      else {
+        
+        //assign rating.id to variable
         ratingId = result.rows[0].id;
+      }        
+    
       
-      
-    });
-      
-    //check for actor
-    actorQuery = "SELECT * FROM actor WHERE name = '"+actor+"'";
-    client.query(actorQuery, function(err, result) {
-      if (err) {
-       return console.error('error running actor table query', err);
-      }
-       
-      //if not there add actor to table
-      if (result.rows[0] === undefined) { 
-        actorAddQuery = "INSERT INTO actor(name) VALUES ('"+actor+"') RETURNING id";
-        client.query(actorAddQuery, function(err, result) {
+        //check for actor
+        actorQuery = "SELECT * FROM actor WHERE name = '"+actor+"'";
+        client.query(actorQuery, function(err, result) {
           if (err) {
-	          return console.error('error running actor insert query', err);
-          } 
-actorId = result.rows[0].id;          
-        }); 
-      }
-      else
-      //assign actor.id to variable
-      actorId = result.rows[0].id;
-    });
-      
-    //check for actress
-    actressQuery = "SELECT * FROM actress WHERE name = '"+actress+"'";
-    client.query(actressQuery, function(err, result) {
-      if (err) {
-       return console.error('error running actress table query', err);
-      }
-       
-      //if not there add actress to table
-      if (result.rows[0] === undefined) { 
-        actressAddQuery = "INSERT INTO actress(name) VALUES ('"+actress+"') RETURNING id";
-        client.query(actressAddQuery, function(err, result) {
-          if (err) {
-	          return console.error('error running actress insert query', err);
+            return console.error('error running actor table query', err);
           }
-          actressId = result.rows[0].id;          
-        }); 
-      }
-       else   
-      //assign actress.id to variable
-      actressId = result.rows[0].id;
+       
+          //if not there add actor to table
+          if (result.rows[0] === undefined) { 
+            actorAddQuery = "INSERT INTO actor(name) VALUES ('"+actor+"') RETURNING id";
+            client.query(actorAddQuery, function(err, result) {
+              if (err) {
+	              return console.error('error running actor insert query', err);
+              }
+          
+              //assign actor.id to variable          
+              actorId = result.rows[0].id;          
+            }); 
+          }
+          else {
+        
+            //assign actor.id to variable
+            actorId = result.rows[0].id;
+          }
+    
+            //check for actress
+            actressQuery = "SELECT * FROM actress WHERE name = '"+actress+"'";
+            client.query(actressQuery, function(err, result) {
+              if (err) {
+                return console.error('error running actress table query', err);
+              }
+       
+              //if not there add actress to table
+              if (result.rows[0] === undefined) { 
+                actressAddQuery = "INSERT INTO actress(name) VALUES ('"+actress+"') RETURNING id";
+                client.query(actressAddQuery, function(err, result) {
+                  if (err) {
+	                  return console.error('error running actress insert query', err);
+                  }
+          
+                  //assign actressId id from table
+                  actressId = result.rows[0].id;
+          
+                  //add movie to the database
+                  addMovieQuery = "INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES"+ 
+                    "('"+title+"', '"+made+"', '"+ratingId+"', '"+actorId+"', '"+actressId+"')";
+                  client.query(addMovieQuery, function(err, result) {
+                    if (err) {
+	                    return console.error('error running movie insert query', err);
+                    }  
+                  });          
+                }); 
+              }
+              else {
+      
+                //assign actress.id to variable
+                actressId = result.rows[0].id;
+        
+                //add movie to the database
+                addMovieQuery = "INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES"+ 
+                  "('"+title+"', '"+made+"', '"+ratingId+"', '"+actorId+"', '"+actressId+"')";
+                client.query(addMovieQuery, function(err, result) {
+                  if (err) {
+	                  return console.error('error running movie insert query', err);
+                  }  
+                });          
+              }
+            });    
+        });
     });
-    console.log("\n\nTitle: "+title+", Year: "+made+"", "Rating: "+ratingId+", Actor: "+actorId+", Actress: "+actressId);
-    //add movie to database
-    addMovieQuery = "INSERT INTO movie(title, made, rating_id, actor_id, actress_id) VALUES"+ 
-      "('"+title+"', '"+made+"', '"+ratingId+"', '"+actorId+"', '"+actressId+"')";
-    client.query(addMovieQuery, function(err, result) {
-      if (err) {
-	      return console.error('error running movie insert query', err);
-      }  
-    });
-   
+
     //close pool connection
     done();
     
@@ -466,9 +494,6 @@ actorId = result.rows[0].id;
     res.end();  
   })
 })
-
-   
-//console.log("\n\nTitle: "+title+", Year: "+made+"", "Rating: "+ratingId+", Actor"+actorId+", Actress: "+actressId);
 
 //set /getMovies path and get movie list sorted by user selection  
 app.get("/getMovies", (req, res) => {
