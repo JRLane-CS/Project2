@@ -168,7 +168,7 @@ $(function() {
         }
         else {
 		      $("ul").append($("<li class='center'>").text(
-            `- Click on movie to delete. -`
+            `- Click on movie to update. -`
           ));   
         }        
 	      json.forEach(function(r) {
