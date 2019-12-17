@@ -227,7 +227,7 @@ $(function() {
     //let user know the movie has been added
     $("#output").html(
       '<br/>'+
-      '<h1><b>'+$("#titleIn")+' has been added!</b></h1>'
+      '<h1><b>'+$("#titleIn").val()+' has been added!</b></h1>'
     );
     
     //wait a couple seconds for user to see message then go to root
