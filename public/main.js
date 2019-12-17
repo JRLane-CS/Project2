@@ -223,6 +223,17 @@ $(function() {
 		    actress: $("#actressIn").val()
       }
     );
+    
+    //let user know the movie has been added
+    $("#output").html(
+      '<br/>'+
+      '<h1><b>'+$("#titleIn")+' has been added!</b></h1>'
+    );
+    
+    //wait a couple seconds for user to see message then go to root
+    setTimeout(function() {
+      $(location).attr('href',url);
+    }, 2000);    
   });
   
   //update database movie query
