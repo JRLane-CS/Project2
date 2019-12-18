@@ -129,7 +129,7 @@ app.get("/getActor", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-	var actor = special(req.query.actor);
+	var actor = cleaner.sanitize(req.query.actor);
 	singlequery = dbstring+'WHERE actor.name = $1 ';
 	client.query(singlequery, [actor], function(err, result) {
       done();
@@ -148,7 +148,7 @@ app.get("/getActress", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    var actress = special(req.query.actress); 
+    var actress = cleaner.sanitize(req.query.actress); 
 	singlequery = dbstring+'WHERE actress.name = $1 ';
     client.query(singlequery, [actress], function(err, result) {
       done();
@@ -167,7 +167,7 @@ app.post("/getRating", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    rating = special(req.body.rating); 
+    rating = cleaner.sanitize(req.body.rating); 
 	  singlequery = dbstring+'WHERE rating.mpaa = $1 ';
     client.query(singlequery, [rating], function(err, result) {
       done();
@@ -186,15 +186,15 @@ app.post("/updateMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    var id =special(req.body.id);
+    var id = cleaner.sanitize(req.body.id);
     var title = special(req.body.title); 
-    var made = special(req.body.year);
-    var rating = special(req.body.rating);
-    var actor = special(req.body.actor);
-    var actress = special(req.body.actress);
-    var actress_id = special(req.body.actressId);
-    var rating_id = special(req.body.ratingId);
-    var actor_id = special(req.body.actorId);
+    var made = cleaner.sanitize(req.body.year);
+    var rating = cleaner.sanitize(req.body.rating);
+    var actor = cleaner.sanitize(req.body.actor);
+    var actress = cleaner.sanitize(req.body.actress);
+    var actress_id = cleaner.sanitize(req.body.actressId);
+    var rating_id = cleaner.sanitize(req.body.ratingId);
+    var actor_id = cleaner.sanitize(req.body.actorId);
     
     //check for rating 
     ratingQuery = "SELECT * FROM rating WHERE mpaa = '"+rating+"'";
@@ -315,10 +315,10 @@ app.post("/deleteMovie", (req, res) => {
     }
     
     //get variables for deletion operations
-    var id = special(req.body.movieId);
-    var rating = special(req.body.ratingId);
-    var actor = special(req.body.actorId);
-    var actress = special(req.body.actressId);
+    var id = cleaner.sanitize(req.body.movieId);
+    var rating = cleaner.sanitize(req.body.ratingId);
+    var actor = cleaner.sanitize(req.body.actorId);
+    var actress = cleaner.sanitize(req.body.actressId);
     
     //delete movie from movie table
     deleteQuery = "DELETE FROM movie WHERE id = "+id;
@@ -398,10 +398,10 @@ app.post("/addMovie", (req, res) => {
     }
     //get variables for deletion operations
     title = special(req.body.title);
-    made = special(req.body.year);
-    rating = special(req.body.rating);
-    actor = special(req.body.actor);
-    actress = special(req.body.actress);
+    made = cleaner.sanitize(req.body.year);
+    rating = cleaner.sanitize(req.body.rating);
+    actor = cleaner.sanitize(req.body.actor);
+    actress = cleaner.sanitize(req.body.actress);
     
     //check for rating 
     ratingQuery = "SELECT * FROM rating WHERE mpaa = '"+rating+"'";
