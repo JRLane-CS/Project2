@@ -23,11 +23,9 @@ const config = {
   user: 'jerry',
   database: 'movies',         
   port: 5432                  
-};
-
-//prepare for post
+};  
   
-  
+//prepare for database connection
 const { Pool } = require('pg'); 
 const pool = new Pool(herokuconfig);  
 
@@ -76,12 +74,8 @@ var ratingId = 0;
 var actorId = 0;
 var actressId = 0;
 
-app.use(function (req, res, next) {
-
-  res.header("Access-Control-Allow-Origin", "herokuapp.com");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+//accept all cor requests
+app.use(cor());
 
 //set express variables
 app.set('port', (PORT));
