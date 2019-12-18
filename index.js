@@ -92,10 +92,7 @@ app.get("/getMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-	  if (req.query.title.indexOf("'") === -1)
-      var title = special(req.query.title);
-    else 
-      var title = cleaner.sanitize(req.query.title);
+    var title = cleaner.sanitize(req.query.title);
 	  singlequery = dbstring+'WHERE title = $1 ';
     client.query(singlequery, [title], function(err, result) {
       done();
