@@ -155,8 +155,9 @@ app.post("/getRating", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
+    rating = cleaner.sanitize(req.body.rating);
 	  singlequery = dbstring+'WHERE rating.mpaa = $1 ';
-    client.query(singlequery, [req.body.rating], function(err, result) {
+    client.query(singlequery, [rating], function(err, result) {
       done();
       if (err) {
         return console.error('error running query', err);
@@ -173,15 +174,15 @@ app.post("/updateMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    var id = req.body.id;
-    var title = req.body.title;
-    var made = req.body.year;
-    var rating = req.body.rating;
-    var actor = req.body.actor;
-    var actress = req.body.actress;
-    var actress_id = req.body.actressId;
-    var rating_id = req.body.ratingId;
-    var actor_id = req.body.actorId;
+    var id = cleaner.sanitize(req.body.id);
+    var title = cleaner.sanitize(req.body.title);
+    var made = cleaner.sanitize(req.body.year);
+    var rating = cleaner.sanitize(req.body.rating);
+    var actor = cleaner.sanitize(req.body.actor);
+    var actress = cleaner.sanitize(req.body.actress);
+    var actress_id = cleaner.sanitize(req.body.actressId);
+    var rating_id = cleaner.sanitize(req.body.ratingId);
+    var actor_id = cleaner.sanitize(req.body.actorId);
     
     //check for rating 
     ratingQuery = "SELECT * FROM rating WHERE mpaa = '"+rating+"'";
@@ -302,10 +303,10 @@ app.post("/deleteMovie", (req, res) => {
     }
     
     //get variables for deletion operations
-    var id = req.body.movieId;
-    var rating = req.body.ratingId;
-    var actor = req.body.actorId;
-    var actress = req.body.actressId;
+    var id = cleaner.sanitize(req.body.movieId);
+    var rating = cleaner.sanitize(req.body.ratingId);
+    var actor = cleaner.sanitize(req.body.actorId);
+    var actress = cleaner.sanitize(req.body.actressId);
     
     //delete movie from movie table
     deleteQuery = "DELETE FROM movie WHERE id = "+id;
@@ -384,11 +385,11 @@ app.post("/addMovie", (req, res) => {
       return console.error('error fetching client from pool', err);
     }
     //get variables for deletion operations
-    title = req.body.title;
-    made = req.body.year;
-    rating = req.body.rating;
-    actor = req.body.actor;
-    actress = req.body.actress;
+    title = cleaner.sanitize(req.body.title);
+    made = cleaner.sanitize(req.body.year);
+    rating = cleaner.sanitize(req.body.rating);
+    actor = cleaner.sanitize(req.body.actor);
+    actress = cleaner.sanitize(req.body.actress);
     
     //check for rating 
     ratingQuery = "SELECT * FROM rating WHERE mpaa = '"+rating+"'";
@@ -501,7 +502,7 @@ app.get("/getMovies", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    var list = req.query.list;
+    var list = cleaner.sanitize(req.query.list);
     listQuery = dbstring+category[list];
     client.query(listQuery, function(err, result) {
       done();
