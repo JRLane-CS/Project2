@@ -516,10 +516,7 @@ app.get("/getMovies", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    if (req.query.title.indexOf("'") === -1)
-      var title = special(req.query.title);
-    else 
-      var title = cleaner.sanitize(req.query.title);
+    var title = special(req.query.title);
     listQuery = dbstring+category[list];
     client.query(listQuery, function(err, result) {
       done();
