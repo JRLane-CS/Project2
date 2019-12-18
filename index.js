@@ -23,9 +23,11 @@ const config = {
   user: 'jerry',
   database: 'movies',         
   port: 5432                  
-};  
+};
+
+//prepare for post
   
-//prepare for database connection
+  
 const { Pool } = require('pg'); 
 const pool = new Pool(herokuconfig);  
 
@@ -74,7 +76,6 @@ var ratingId = 0;
 var actorId = 0;
 var actressId = 0;
 
-//accept all cor requests
 app.use(cors());
 
 //set express variables
@@ -92,7 +93,7 @@ app.get("/getMovie", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    var title = cleaner.sanitize(req.query.title);
+	  var title = cleaner.sanitize(req.query.title); 
 	  singlequery = dbstring+'WHERE title = $1 ';
     client.query(singlequery, [title], function(err, result) {
       done();
@@ -513,7 +514,7 @@ app.get("/getMovies", (req, res) => {
     if (err) {
       return console.error('error fetching client from pool', err);
     }
-    var title = cleaner.sanitize(req.query.title);
+    var list = cleaner.sanitize(req.query.list);
     listQuery = dbstring+category[list];
     client.query(listQuery, function(err, result) {
       done();
