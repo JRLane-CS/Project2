@@ -1,4 +1,4 @@
-/* this index.js set up for local access only */
+/* this index.js set up for heroku access only */
 
 //set node variables
 const path = require('path');
@@ -27,7 +27,7 @@ const config = {
   
 //prepare for database connection
 const { Pool } = require('pg'); 
-const pool = new Pool(config);  
+const pool = new Pool(herokuconfig);  
 
 //set query variables
 var singleQuery = '';
