@@ -15,6 +15,12 @@ var actor;
 var actress;
 var rating;
 
+//match top divs
+function match(){
+  var divHeight = $("#head").height();
+  $("#border").height(divHeight+(divHeight*.2));
+}
+
 //base db functions through server
 $(function() {
    
@@ -365,7 +371,9 @@ $("#getMovie").click(function(event) {
   $("#functions").empty();
   $("#output").empty();
   $("#functions").html(
-	  '<form name="form-1">'+
+	  '<br>'+
+    '<br>'+
+    '<form name="form-1">'+
     '<div>'+
     '<label for="title">Enter a movie title to search</label>'+
     '<input type="text" name="title" id="title"/>'+
@@ -385,7 +393,9 @@ $("#getActor").click(function(event) {
   $("#functions").empty();
   $("#output").empty();
   $("#functions").html(
-	  '<form name="form-1">'+
+	  '<br>'+
+    '<br>'+
+    '<form name="form-1">'+
 	  '<div>'+
     '<label for="actor">Enter an actor name to search</label>'+
     '<input type="text" name="actor" id="actor"/>'+
@@ -405,7 +415,9 @@ $("#getActress").click(function(event) {
   $("#functions").empty();
   $("#output").empty();
   $("#functions").html(
-	  '<form name="form-1">'+
+	  '<br>'+
+    '<br>'+
+    '<form name="form-1">'+
 	  '<div>'+
     '<label for="actress">Enter an actress name to search</label>'+
     '<input type="text" name="actress" id="actress"/>'+
@@ -425,7 +437,9 @@ $("#getRating").click(function(event) {
   $("#functions").empty();
   $("#output").empty();
   $("#functions").html(
-	  '<form method="post" name="form-1">'+
+	  '<br>'+
+    '<br>'+
+    '<form method="post" name="form-1">'+
 	  '<div>'+
     '<label for="rating">Select a rating to search</label>'+
     '<select id="rating" name="rating" >'+
@@ -438,7 +452,8 @@ $("#getRating").click(function(event) {
     '</select>'+
     '</div>'+
     '<div>'+
-    '<button type="button" id="searchRating" >Search</button>'+
+    '<button class="towardLeft" type="button" id="searchRating">'+
+    'Search</button>'+
     '</div>'+
     '</form>'+
 	  '<script src="main.js" ></script>'
@@ -453,6 +468,8 @@ $("#deleteMovie").click(function(event) {
   $("#functions").html(
 	  '<form name="form-1">'+
 	  '<div>'+
+    '<br>'+
+    '<br>'+
     '<label for="delete">Enter movie to delete</label>'+
     '<input type="text" name="delete" id="delete"/>'+
     '</div>'+
@@ -469,7 +486,10 @@ $("#addMovie").click(function(event) {
   addMovie();
   $("#functions").append(
     '<div>'+
-    '<button type="button" id="addMovieDb" >Enter</button>'+
+    '<br>'+
+    '<br>'+
+    '<button type="button" id="addMovieDb" >'+
+    'Add Movie</button>'+
     '</div>'+
     '</form>'+
 	  '<script src="main.js" ></script>'
@@ -484,6 +504,8 @@ $("#updateMovie").click(function(event) {
   $("#functions").html(
 	  '<form name="form-1">'+
 	  '<div>'+
+    '<br>'+
+    '<br>'+
     '<label for="update">Enter movie to update</label>'+
     '<input type="text" name="update" id="update"/>'+
     '</div>'+
@@ -500,6 +522,8 @@ $("#updateTrue").click(function(event) {
   addMovie();
   $("#functions").append(
     '<div>'+
+    '<br>'+
+    '<br>'+
     '<button type="button" id="updateMovieDbQuery" >Update</button>'+
     '</div>'+
     '</form>'+
@@ -519,6 +543,9 @@ $("#listMovies").click(function(event) {
   $("#functions").empty(); 
   $("#output").empty();
   $("#functions").html(
+    '<div>'+
+    '<br>'+
+    '<br>'+
     '<form name="form-1">'+
     '<label for="list">Show all movies sorted by:</label>'+
     '<select id="list" name="list" >'+
@@ -530,7 +557,8 @@ $("#listMovies").click(function(event) {
     '</select>'+
     '</div>'+
     '<div>'+
-    '<button type="button" id="all">Show</button>'+
+    '<button class="towardLeft" type="button" id="all">'+
+    'List</button>'+
     '</div>'+
     '</form>'+
     '<script src="main.js" ></script>'	
@@ -545,6 +573,8 @@ function addMovie() {
   $("#functions").html(
 	  '<form name="form-1">'+
 	  '<div>'+
+    '<br>'+
+    '<br>'+
     '<label for="title">Enter movie title</label>'+
     '<input type="text" name="title" id="titleIn"/>'+
     '</div>'+

@@ -13,14 +13,20 @@
 	<!--get css-->
     <link rel = "stylesheet" type = "text/css" href = "db.css" />
   </head>
-  <body>
-    <div class="jumbotron" id="head" >
+  <body onload="match()">
+    <div class="flexbox-container" id="border">
+    <div id="head" >
 	  <h1 id = "header">
 	    Fun Times
 	  </h1>
 	  <hr>
 	</div>
+  </div>
 	<div id="functions">
+      <br>
+  <br>
+  
+      
       <form type = "GET" action = "/getMovie" id="form-1" >
         <input type = "button" id = "getMovie" value = "Search by Movie" />
 	  </form>
