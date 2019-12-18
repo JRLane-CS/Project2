@@ -483,6 +483,7 @@ $("#deleteMovie").click(function(event) {
 
 //entry page to add movie
 $("#addMovie").click(function(event) { 
+  $("#header").text("Add Movie");
   addMovie();
   $("#functions").append(
     '<div>'+
