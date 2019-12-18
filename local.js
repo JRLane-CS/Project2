@@ -23,11 +23,9 @@ const config = {
   user: 'jerry',
   database: 'movies',         
   port: 5432                  
-};
-
-//prepare for post
+};  
   
-  
+//prepare for database connection
 const { Pool } = require('pg'); 
 const pool = new Pool(config);  
 
@@ -76,12 +74,25 @@ var ratingId = 0;
 var actorId = 0;
 var actressId = 0;
 
-app.use(function (req, res, next) {
+//sanitizes queryIn and allows for apostrophe insertion into db
+function special(queryIn) {
+  
+  //sanitize inputs
+  var cleaned = cleaner.sanitize(queryIn);
+  
+  //if an apostrophe is found, replace it with two, put into cleaned variable
+  var replacement = cleaned;
+  while (replacement.indexOf("'") !== -1 && replacement.indexOf("''") === -1) {
+    replacement = cleaned.replace(/'/g, "''");
+    cleaned = replacement;
+  }
+  
+  //return cleaned variable, and if it had apostrophe, now it has two
+  return cleaned;
+}
 
-  res.header("Access-Control-Allow-Origin", "herokuapp.com");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+//accept all cor requests
+app.use(cors());
 
 //set express variables
 app.set('port', (PORT));
@@ -111,23 +122,6 @@ app.get("/getMovie", (req, res) => {
     });
   })
 })
-
-//sanitizes queryIn and allows for apostrophe insertion into db
-function special(queryIn) {
-  
-  //sanitize inputs
-  var cleaned = cleaner.sanitize(queryIn);
-  
-  //if an apostrophe is found, replace it with two, put into cleaned variable
-  var replacement = cleaned;
-  while (replacement.indexOf("'") !== -1 && replacement.indexOf("''") === -1) {
-    replacement = cleaned.replace(/'/g, "''");
-    cleaned = replacement;
-  }
-  
-  //return cleaned variable, and if it had apostrophe, now it has two
-  return cleaned;
-}
 
 //set /getActor path and get single query
 app.get("/getActor", (req, res) => {
@@ -227,7 +221,6 @@ app.post("/updateMovie", (req, res) => {
         ratingId = result.rows[0].id;
       }        
     
-      
         //check for actor
         actorQuery = "SELECT * FROM actor WHERE name = '"+actor+"'";
         client.query(actorQuery, function(err, result) {
@@ -434,7 +427,6 @@ app.post("/addMovie", (req, res) => {
         ratingId = result.rows[0].id;
       }        
     
-      
         //check for actor
         actorQuery = "SELECT * FROM actor WHERE name = '"+actor+"'";
         client.query(actorQuery, function(err, result) {

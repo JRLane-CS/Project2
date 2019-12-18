@@ -247,16 +247,6 @@ $(function() {
     event.preventDefault();
     $("ul").empty();
     
-    
-	  console.log("Main Before updateMovie:\nId: "+movieId+
-                "\nTitle: "+title+
-                "\nYear: "+$("#yearIn").val()+
-                "\nRated: "+$("#ratingIn").val()+
-                "\nActor: "+$("#actorIn").val()+
-                "\nActress: "+$("#actressIn").val());  
-    
-    
-    
     //call server on updateMovie endpoint, pass variables
     $.post(
       `${url}/updateMovie`,
@@ -269,16 +259,6 @@ $(function() {
         actress:   $("#actressIn").val()
       }
     );
-    
-    
-    console.log("Main After updateMovie:\nId: "+movieId+
-                "\nTitle: "+title+
-                "\nYear: "+year+
-                "\nRated: "+rating+
-                "\nActor: "+actor+
-                "\nActress: "+actress);  
-            
- 
     
     //let user know the update is finished
     $("#output").html(
